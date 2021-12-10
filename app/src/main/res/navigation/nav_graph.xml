@@ -21,7 +21,7 @@
         android:label="Attraction Details"
         tools:layout="@layout/fragment_attraction_detail" >
         <argument
-            android:name="atractionId"
+            android:name="attractionId"
             app:argType="string" />
     </fragment>
 
