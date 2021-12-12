@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.senya.adapter.HomeFragmentAdapter
 import com.example.senya.databinding.FragmentHomeBinding
 
 class HomeFragment : BaseFragment() {
@@ -24,7 +25,11 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = binding.rvRecyclerView
+        val homeAdapter = HomeFragmentAdapter(){
+            //to handle item being clicked
+        }
+        binding.rvRecyclerView.adapter = homeAdapter
+        homeAdapter.setData(emptyList())
     }
 
     override fun onDestroy() {
