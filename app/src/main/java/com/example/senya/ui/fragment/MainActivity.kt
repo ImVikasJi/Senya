@@ -5,10 +5,22 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.senya.R
+import com.example.senya.data.Attraction
+import com.example.senya.data.AttractionsResponse
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.addAdapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import java.lang.reflect.Type
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
+
+    val attractionList: List<Attraction> by lazy {
+        parseAttractions()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,5 +29,16 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+    }
+
+    private fun parseAttractions(): List<Attraction> {
+        val textFromFile =
+            resources.openRawResource(R.raw.croatia).bufferedReader().use { it.readText() }
+        val moshi = Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+
+        val adapter: JsonAdapter<AttractionsResponse> = moshi.adapter(AttractionsResponse::class.java)
+        return  adapter.fromJson(textFromFile)!!.attractions
     }
 }

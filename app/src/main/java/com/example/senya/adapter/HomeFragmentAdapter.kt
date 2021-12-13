@@ -32,12 +32,12 @@ class HomeFragmentAdapter(private val onClickedCallBack: () -> Unit) : RecyclerV
 
     inner class AttractionViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_attraction_detail, parent, false)
+            .inflate(R.layout.view_holder_attraction, parent, false)
     ) {
         private val binding = ViewHolderAttractionBinding.bind(itemView)
         fun onBind(attraction: Attraction, onClicked: () -> Unit) {
             binding.titleTextView.text = attraction.title
-            Picasso.get().load(attraction.image_url).into(binding.headerImageView);
+            Picasso.get().load(attraction.image_urls[0]).into(binding.headerImageView);
             binding.monthsToVisitTextView.text = attraction.months_to_visit
 
             binding.root.setOnClickListener {

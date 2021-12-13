@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.senya.adapter.HomeFragmentAdapter
 import com.example.senya.databinding.FragmentHomeBinding
 
@@ -17,7 +19,7 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -29,7 +31,8 @@ class HomeFragment : BaseFragment() {
             //to handle item being clicked
         }
         binding.rvRecyclerView.adapter = homeAdapter
-        homeAdapter.setData(emptyList())
+        binding.rvRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(),RecyclerView.VERTICAL))
+        homeAdapter.setData(attractions)
     }
 
     override fun onDestroy() {
