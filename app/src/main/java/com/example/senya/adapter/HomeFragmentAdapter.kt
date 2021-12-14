@@ -8,7 +8,7 @@ import com.example.senya.data.Attraction
 import com.example.senya.databinding.ViewHolderAttractionBinding
 import com.squareup.picasso.Picasso
 
-class HomeFragmentAdapter(private val onClickedCallBack: () -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeFragmentAdapter(private val onClickedCallBack: (String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val attractions = ArrayList<Attraction>()
 
@@ -35,13 +35,13 @@ class HomeFragmentAdapter(private val onClickedCallBack: () -> Unit) : RecyclerV
             .inflate(R.layout.view_holder_attraction, parent, false)
     ) {
         private val binding = ViewHolderAttractionBinding.bind(itemView)
-        fun onBind(attraction: Attraction, onClicked: () -> Unit) {
+        fun onBind(attraction: Attraction, onClicked: (String) -> Unit) {
             binding.titleTextView.text = attraction.title
             Picasso.get().load(attraction.image_urls[0]).into(binding.headerImageView);
             binding.monthsToVisitTextView.text = attraction.months_to_visit
 
             binding.root.setOnClickListener {
-                onClicked
+                onClicked(attraction.id)
             }
         }
     }
