@@ -1,5 +1,6 @@
 package com.example.senya.ui.fragment
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,14 +11,15 @@ import com.example.senya.R
 import com.example.senya.data.Attraction
 import com.example.senya.databinding.FragmentAttractionDetailBinding
 import com.squareup.picasso.Picasso
+import java.lang.StringBuilder
 
 class AttractionDetailFragment : BaseFragment() {
 
-    private var _binding : FragmentAttractionDetailBinding? = null
+    private var _binding: FragmentAttractionDetailBinding? = null
     private val binding get() = _binding!!
 
     private val safeArgs: AttractionDetailFragmentArgs by navArgs()
-    private val attraction : Attraction by lazy {
+    private val attraction: Attraction by lazy {
         attractions.find { it.id == safeArgs.attractionId }!!
     }
 
@@ -30,8 +32,8 @@ class AttractionDetailFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View ?{
-        _binding = FragmentAttractionDetailBinding.inflate(inflater,container,false)
+    ): View? {
+        _binding = FragmentAttractionDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -45,24 +47,38 @@ class AttractionDetailFragment : BaseFragment() {
         binding.numberOfFactsTextView.text = "${attraction.facts.size} facts"
 
         binding.numberOfFactsTextView.setOnClickListener {
-            //todo()
+            val stringBuilder = StringBuilder("")
+            attraction.facts.forEach {
+                stringBuilder.append("\u2022 $it")
+                stringBuilder.append("\n\n")
+            }
+            // To fetch the single string from our facts
+            val message =
+                stringBuilder.toString().substring(0, stringBuilder.toString().lastIndexOf("\n\n"))
+            AlertDialog.Builder(requireContext(),R.style.MyDialog)
+                .setTitle("${attraction.title} Facts")
+                .setMessage(message)
+                .setPositiveButton("Ok") { dialog, which ->
+                    dialog.dismiss()
+                }.show()
         }
-    }
+    }//FF018786
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_attraction_detail,menu)
+        inflater.inflate(R.menu.menu_attraction_detail, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return  when(item.itemId){
-            R.id.menuItemLocation ->{
-                val uri = Uri.parse("geo:${attraction.location.latitude},${attraction.location.longitude}?z=9&q=${attraction.title}")
+        return when (item.itemId) {
+            R.id.menuItemLocation -> {
+                val uri =
+                    Uri.parse("geo:${attraction.location.latitude},${attraction.location.longitude}?z=9&q=${attraction.title}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, uri)
                 mapIntent.setPackage("com.google.android.apps.maps")
-                    startActivity(mapIntent)
+                startActivity(mapIntent)
                 true
             }
-            else ->  super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
 
     }
