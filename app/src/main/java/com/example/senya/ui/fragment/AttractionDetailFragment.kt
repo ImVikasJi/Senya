@@ -1,8 +1,5 @@
 package com.example.senya.ui.fragment
 
-import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.navArgs

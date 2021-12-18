@@ -1,4 +1,4 @@
-package com.example.senya.viewmodel
+package com.example.senya.viewModel
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -17,6 +17,7 @@ class AttractionsViewModel: ViewModel() {
 
     val factSelectedLiveData = MutableLiveData<Attraction>()
 
+    val searchQuery = MutableLiveData<Attraction>()
 
     fun init(context: Context){
         val attractionList = repository.parseAttractions(context)

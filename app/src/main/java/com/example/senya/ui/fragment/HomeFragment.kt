@@ -9,6 +9,7 @@ import com.example.senya.R
 import com.example.senya.adapter.HomeFragmentAdapter
 import com.example.senya.databinding.FragmentHomeBinding
 
+private const val TAG = "HomeFragment"
 class HomeFragment : BaseFragment() {
 
     private var _binding : FragmentHomeBinding? = null
@@ -19,12 +20,14 @@ class HomeFragment : BaseFragment() {
         setHasOptionsMenu(true)
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        _binding = FragmentHomeBinding.inflate(inflater,container,false) //inflate(inflater,container,false)
         return binding.root
     }
 
@@ -50,21 +53,22 @@ class HomeFragment : BaseFragment() {
          * and implement it
          * someday
          */
-//        val searchItem = menu.findItem(R.id.menuSearch)
-//        val searchView = searchItem.actionView as SearchView
-//
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                if(query!=null){
-//                    activityViewModel.selectionAttractionLiveData
-//                }
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//
-//        })
+        val searchItem = menu.findItem(R.id.menuSearch)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query!=null){
+                    activityViewModel.selectionAttractionLiveData
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

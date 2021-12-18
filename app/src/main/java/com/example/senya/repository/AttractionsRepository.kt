@@ -20,4 +20,5 @@ class AttractionsRepository {
         val adapter: JsonAdapter<AttractionsResponse> = moshi.adapter(AttractionsResponse::class.java)
         return  adapter.fromJson(textFromFile)!!.attractions
     }
+
 }

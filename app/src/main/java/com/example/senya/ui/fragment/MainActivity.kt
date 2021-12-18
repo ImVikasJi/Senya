@@ -12,20 +12,14 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.senya.R
-import com.example.senya.data.Attraction
-import com.example.senya.data.AttractionsResponse
-import com.example.senya.viewmodel.AttractionsViewModel
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import com.squareup.moshi.addAdapter
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import java.lang.reflect.Type
+import com.example.senya.viewModel.AttractionsViewModel
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+
 
     val viewModel: AttractionsViewModel by viewModels()
 
