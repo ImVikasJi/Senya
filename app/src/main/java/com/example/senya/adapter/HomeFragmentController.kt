@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyController
 import com.example.senya.R
 import com.example.senya.data.Attraction
+import com.example.senya.databinding.EpoxyModelHeaderBinding
 import com.example.senya.databinding.ViewHolderAttractionBinding
 import com.example.senya.ui.epoxy.LoadingEpoxyModel
 import com.example.senya.ui.epoxy.ViewBindingKotlinModel
 import com.squareup.picasso.Picasso
 
 class HomeFragmentController(private val onClickedCallBack: (String) -> Unit) :
-    EpoxyController(){
+    EpoxyController() {
 
     var isLoading: Boolean = false
         set(value) {
@@ -21,12 +22,12 @@ class HomeFragmentController(private val onClickedCallBack: (String) -> Unit) :
         }
 
 
-     var attractions = ArrayList<Attraction>()
-         set(value) {
-             field = value
-             isLoading = false
-             requestModelBuild()
-         }
+    var attractions = ArrayList<Attraction>()
+        set(value) {
+            field = value
+            isLoading = false
+            requestModelBuild()
+        }
 
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 //        return AttractionViewHolder(parent)
@@ -47,16 +48,25 @@ class HomeFragmentController(private val onClickedCallBack: (String) -> Unit) :
 //    }
 
     override fun buildModels() {
-        if(isLoading){
-             LoadingEpoxyModel().id("Loading_state").addTo(this)
+        if (isLoading) {
+            LoadingEpoxyModel().id("Loading_state").addTo(this)
             return
         }
 
-        if(attractions.isEmpty()){
+        if (attractions.isEmpty()) {
             // todo
             return
         }
 
+        val firstGroup = attractions.filter { it.title.startsWith("s",true) || it.title.startsWith("D",true)  }
+
+        HeaderEpoxyModel("Recently viewed").id("header_1").addTo(this)
+        firstGroup.forEach { attraction ->
+            AttractionEpoxyModel(attraction, onClickedCallBack)
+                .id(attraction.id)
+                .addTo(this)
+        }
+        HeaderEpoxyModel("All attractions").id("header_2").addTo(this)
         attractions.forEach { attraction ->
             AttractionEpoxyModel(attraction, onClickedCallBack)
                 .id(attraction.id)
@@ -94,8 +104,16 @@ class HomeFragmentController(private val onClickedCallBack: (String) -> Unit) :
 
             root.setOnClickListener {
                 onClicked(attraction.id)
+            }
         }
-
     }
 
-} }
+    data class HeaderEpoxyModel(
+        val headerText: String
+        ):  ViewBindingKotlinModel<EpoxyModelHeaderBinding>(R.layout.epoxy_model_header){
+
+        override fun EpoxyModelHeaderBinding.bind() {
+            headerTextView.text = headerText
+        }
+    }
+}
