@@ -6,7 +6,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senya.R
-import com.example.senya.adapter.HomeFragmentAdapter
+import com.example.senya.adapter.HomeFragmentController
+import com.example.senya.data.Attraction
 import com.example.senya.databinding.FragmentHomeBinding
 
 private const val TAG = "HomeFragment"
@@ -34,16 +35,17 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val homeAdapter = HomeFragmentAdapter{ attractionId ->
+        val epoxyController = HomeFragmentController{ attractionId ->
             activityViewModel.onAttractionSelected(attractionId)
             navController.navigate(R.id.action_homeFragment_to_attractionDetailFragment)
             //to handle item being clicked
         }
-        binding.rvRecyclerView.adapter = homeAdapter
-        binding.rvRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(),RecyclerView.VERTICAL))
+        binding.epoxyRecyclerView.setController(epoxyController)
+        binding.epoxyRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(),RecyclerView.VERTICAL))
 
+        epoxyController.isLoading = true
         activityViewModel.attractionLiveData.observe(viewLifecycleOwner){ attractions ->
-            homeAdapter.setData(attractions)
+            epoxyController.attractions = attractions
         }
     }
 
@@ -53,27 +55,27 @@ class HomeFragment : BaseFragment() {
          * and implement it
          * someday
          */
-        val searchItem = menu.findItem(R.id.menuSearch)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if(query!=null){
-                    activityViewModel.selectionAttractionLiveData
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-        })
+//        val searchItem = menu.findItem(R.id.menuSearch)
+//        val searchView = searchItem.actionView as SearchView
+//
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                if(query!=null){
+//                    activityViewModel.selectionAttractionLiveData
+//                }
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                return true
+//            }
+//
+//        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menuSearch -> {
+            R.id.menuItemLocation -> {
                 val attraction = activityViewModel.selectionAttractionLiveData.value ?: return true
                 activityViewModel.locationSelectedLiveData.postValue(attraction)
                 true

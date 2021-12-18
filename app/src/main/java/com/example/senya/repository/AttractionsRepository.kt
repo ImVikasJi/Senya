@@ -10,7 +10,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
 class AttractionsRepository {
 
-    fun parseAttractions(context: Context): List<Attraction> {
+    fun parseAttractions(context: Context): ArrayList<Attraction> {
         val textFromFile =
             context.resources.openRawResource(R.raw.croatia).bufferedReader().use { it.readText() }
         val moshi = Moshi.Builder()
@@ -18,7 +18,7 @@ class AttractionsRepository {
             .build()
 
         val adapter: JsonAdapter<AttractionsResponse> = moshi.adapter(AttractionsResponse::class.java)
-        return  adapter.fromJson(textFromFile)!!.attractions
+        return  adapter.fromJson(textFromFile)!!.attractions as ArrayList<Attraction>
     }
 
 }
